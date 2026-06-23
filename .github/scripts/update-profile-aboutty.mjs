@@ -5,15 +5,21 @@ import { promisify } from "node:util";
 const execFile = promisify(execFileCallback);
 const username = process.env.GITHUB_REPOSITORY_OWNER ?? "pbandj082";
 const outputPath = "aboutty.json";
+const token = await resolveGitHubToken();
+const profileAsciiArt = String.raw` ____   ____      _     _   _  ____       _    ___    ___   ____  
+|  _ \ | __ )    / \   | \ | ||  _ \     | |  / _ \  ( _ ) |___ \ 
+| |_) ||  _ \   / _ \  |  \| || | | | _  | | | | | | / _ \   __) |
+|  __/ | |_) | / ___ \ | |\  || |_| || |_| | | |_| || (_) | / __/ 
+|_|    |____/ /_/   \_\|_| \_||____/  \___/   \___/  \___/ |_____|`;
 
-const user = await fetchJson(`https://api.github.com/users/${username}`);
-const repos = await fetchRepos(username);
+const user = await fetchJson(`https://api.github.com/users/${username}`, token);
+const [repos, events, contributions] = await Promise.all([
+  fetchRepos(username),
+  fetchRecentEvents(username),
+  fetchContributions(username)
+]);
 const ownRepos = repos.filter((repo) => !repo.fork);
-const topRepos = [...ownRepos].sort((a, b) => b.stargazers_count - a.stargazers_count).slice(0, 5);
-const topLanguages = summarizeLanguages(ownRepos).slice(0, 5);
-const totalStars = ownRepos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
-const totalForks = ownRepos.reduce((sum, repo) => sum + repo.forks_count, 0);
-const profileCommitCount = await readGitOutput(["rev-list", "--count", "HEAD"], "0");
+const languages = await fetchLanguageBreakdown(ownRepos);
 const updatedAt = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
 
 const config = {
@@ -42,6 +48,13 @@ const config = {
   },
   steps: [
     {
+      type: "output",
+      typingIntervalMs: 0,
+      text: [
+        { value: profileAsciiArt, color: "#6ee7b7", bold: true }
+      ]
+    },
+    {
       type: "command",
       text: "whoami"
     },
@@ -61,44 +74,39 @@ const config = {
         { value: `${username}@github\n`, color: "#6ee7b7", bold: true },
         { value: "----------------\n", color: "#475569" },
         ...line("Name", user.name ?? username, "#f8fafc"),
-        ...line("Bio", compact(user.bio ?? "building software in public", 48), "#cbd5e1"),
+        ...line("Bio", compact(user.bio ?? "building software in public", 52), "#cbd5e1"),
         ...line("Location", user.location ?? "remote", "#93c5fd"),
-        ...line("Company", user.company ?? "independent", "#c084fc"),
         ...line("Followers", formatNumber(user.followers), "#facc15"),
         ...line("Following", formatNumber(user.following), "#facc15"),
-        ...line("Public repos", formatNumber(user.public_repos), "#6ee7b7"),
-        ...line("Owned repos", formatNumber(ownRepos.length), "#6ee7b7"),
-        ...line("Total stars", formatNumber(totalStars), "#facc15"),
-        ...line("Total forks", formatNumber(totalForks), "#c084fc"),
-        ...line("Profile commits", profileCommitCount, "#6ee7b7"),
-        ...line("Languages", topLanguages.join(", ") || "unknown", "#8bd5ca"),
         ...line("Updated", updatedAt, "#94a3b8", false)
       ]
     },
     {
       type: "command",
-      text: `gh repo list ${username} --limit 5 --sort stargazers`
+      text: `gh api graphql --field login=${username} --field query=contributions`
     },
     {
       type: "output",
       typingIntervalMs: 0,
-      text: repoSegments(topRepos)
+      text: contributionSegments(contributions)
     },
     {
       type: "command",
-      text: "aboutty aboutty.json --out assets/aboutty.svg"
-    },
-    {
-      type: "output",
-      text: [
-        { value: "Rendering GitHub profile SVG" },
-        { value: "...", repeat: 3, repeatDelayMs: 280, typingIntervalMs: 160, color: "#6ee7b7" }
-      ]
+      text: `gh api users/${username}/events/public --jq '.[0:5]'`
     },
     {
       type: "output",
       typingIntervalMs: 0,
-      text: "Generated assets/aboutty.svg"
+      text: activitySegments(events)
+    },
+    {
+      type: "command",
+      text: `github-linguist --user ${username} --summary`
+    },
+    {
+      type: "output",
+      typingIntervalMs: 0,
+      text: languageSegments(languages)
     }
   ]
 };
@@ -111,7 +119,8 @@ async function fetchRepos(owner) {
 
   for (let page = 1; page <= 10; page += 1) {
     const batch = await fetchJson(
-      `https://api.github.com/users/${owner}/repos?type=owner&sort=updated&per_page=100&page=${page}`
+      `https://api.github.com/users/${owner}/repos?type=owner&sort=updated&per_page=100&page=${page}`,
+      token
     );
 
     repos.push(...batch);
@@ -124,9 +133,177 @@ async function fetchRepos(owner) {
   return repos;
 }
 
-async function fetchJson(url) {
+async function fetchRecentEvents(owner) {
+  try {
+    const events = await fetchJson(`https://api.github.com/users/${owner}/events/public?per_page=30`, token);
+    return events.map(describeEvent).filter(Boolean).slice(0, 5);
+  } catch (error) {
+    console.warn(`Could not fetch recent activity: ${formatError(error)}`);
+    return [];
+  }
+}
+
+async function fetchContributions(login) {
+  const activeToken = token;
+  const to = new Date();
+  const from = new Date(to);
+  from.setUTCFullYear(from.getUTCFullYear() - 1);
+
+  if (!activeToken) {
+    return await fetchPublicContributions(login, from, to);
+  }
+
+  const query = `
+    query ProfileContributions($login: String!, $from: DateTime!, $to: DateTime!) {
+      user(login: $login) {
+        contributionsCollection(from: $from, to: $to) {
+          contributionCalendar {
+            totalContributions
+            weeks {
+              contributionDays {
+                date
+                contributionCount
+              }
+            }
+          }
+          totalCommitContributions
+          totalIssueContributions
+          totalPullRequestContributions
+          totalPullRequestReviewContributions
+          restrictedContributionsCount
+        }
+      }
+    }
+  `;
+
+  try {
+    const result = await fetchGraphQL(query, {
+      login,
+      from: from.toISOString(),
+      to: to.toISOString()
+    }, activeToken);
+    const collection = result?.data?.user?.contributionsCollection;
+
+    if (!collection) {
+      return null;
+    }
+
+    const days = collection.contributionCalendar.weeks.flatMap((week) => week.contributionDays);
+    const activeDays = days.filter((day) => day.contributionCount > 0).length;
+    const bestDay = days.reduce(
+      (best, day) => (day.contributionCount > best.contributionCount ? day : best),
+      { date: "unknown", contributionCount: 0 }
+    );
+
+    return {
+      source: "graphql",
+      total: collection.contributionCalendar.totalContributions,
+      commits: collection.totalCommitContributions,
+      issues: collection.totalIssueContributions,
+      pullRequests: collection.totalPullRequestContributions,
+      reviews: collection.totalPullRequestReviewContributions,
+      restricted: collection.restrictedContributionsCount,
+      activeDays,
+      bestDay,
+      period: `${from.toISOString().slice(0, 10)}..${to.toISOString().slice(0, 10)}`
+    };
+  } catch (error) {
+    console.warn(`Could not fetch contribution summary: ${formatError(error)}`);
+    return await fetchPublicContributions(login, from, to);
+  }
+}
+
+async function fetchPublicContributions(login, from, to) {
+  try {
+    const url = new URL(`https://github.com/users/${login}/contributions`);
+    url.searchParams.set("from", from.toISOString().slice(0, 10));
+    url.searchParams.set("to", to.toISOString().slice(0, 10));
+
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent": "aboutty-profile-readme"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`GitHub contribution page request failed: ${response.status} ${response.statusText}`);
+    }
+
+    const html = await response.text();
+    const totalMatch = html.match(/>\s*([\d,]+)\s+contributions?\s+in\s+(\d{4})\s*</);
+    const days = [];
+    const cellPattern =
+      /<td[^>]*data-date="([^"]+)"[^>]*class="ContributionCalendar-day"[^>]*><\/td>\s*<tool-tip[^>]*>([\s\S]*?)<\/tool-tip>/g;
+
+    for (const match of html.matchAll(cellPattern)) {
+      const countMatch = match[2].match(/([\d,]+)\s+contributions?/);
+      days.push({
+        date: match[1],
+        contributionCount: countMatch ? parseNumber(countMatch[1]) : 0
+      });
+    }
+
+    const activeDays = days.filter((day) => day.contributionCount > 0).length;
+    const bestDay = days.reduce(
+      (best, day) => (day.contributionCount > best.contributionCount ? day : best),
+      { date: "unknown", contributionCount: 0 }
+    );
+
+    return {
+      source: "public",
+      total: totalMatch ? parseNumber(totalMatch[1]) : days.reduce((sum, day) => sum + day.contributionCount, 0),
+      commits: null,
+      issues: null,
+      pullRequests: null,
+      reviews: null,
+      restricted: null,
+      activeDays,
+      bestDay,
+      period: totalMatch ? `${totalMatch[2]} public calendar` : `${from.toISOString().slice(0, 10)}..${to.toISOString().slice(0, 10)}`
+    };
+  } catch (error) {
+    console.warn(`Could not fetch public contribution calendar: ${formatError(error)}`);
+    return null;
+  }
+}
+
+async function fetchLanguageBreakdown(repos) {
+  const totals = new Map();
+  const targetRepos = repos.slice(0, 30);
+  const languageMaps = await Promise.all(
+    targetRepos.map(async (repo) => {
+      try {
+        return await fetchJson(repo.languages_url, token);
+      } catch {
+        return {};
+      }
+    })
+  );
+
+  for (const languageMap of languageMaps) {
+    for (const [language, bytes] of Object.entries(languageMap)) {
+      totals.set(language, (totals.get(language) ?? 0) + bytes);
+    }
+  }
+
+  const totalBytes = [...totals.values()].reduce((sum, bytes) => sum + bytes, 0);
+
+  if (totalBytes === 0) {
+    return [];
+  }
+
+  return [...totals.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6)
+    .map(([language, bytes]) => ({
+      language,
+      percent: Math.round((bytes / totalBytes) * 100)
+    }));
+}
+
+async function fetchJson(url, activeToken) {
   const response = await fetch(url, {
-    headers: createGitHubHeaders()
+    headers: createGitHubHeaders(activeToken)
   });
 
   if (!response.ok) {
@@ -136,25 +313,202 @@ async function fetchJson(url) {
   return await response.json();
 }
 
-function createGitHubHeaders() {
+async function fetchGraphQL(query, variables, activeToken) {
+  const response = await fetch("https://api.github.com/graphql", {
+    method: "POST",
+    headers: {
+      ...createGitHubHeaders(activeToken),
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ query, variables })
+  });
+
+  if (!response.ok) {
+    throw new Error(`GitHub GraphQL request failed: ${response.status} ${response.statusText}`);
+  }
+
+  const result = await response.json();
+
+  if (result.errors?.length) {
+    throw new Error(result.errors.map((error) => error.message).join("; "));
+  }
+
+  return result;
+}
+
+function createGitHubHeaders(activeToken) {
   const headers = {
     Accept: "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28"
   };
 
-  if (process.env.GITHUB_TOKEN) {
-    headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  if (activeToken) {
+    headers.Authorization = `Bearer ${activeToken}`;
   }
 
   return headers;
 }
 
-async function readGitOutput(args, fallback) {
+async function resolveGitHubToken() {
+  const envToken = process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN;
+
+  if (envToken) {
+    return envToken;
+  }
+
   try {
-    const result = await execFile("git", args);
-    return result.stdout.trim() || fallback;
+    const result = await execFile("gh", ["auth", "token"]);
+    return result.stdout.trim() || null;
   } catch {
-    return fallback;
+    return null;
+  }
+}
+
+function contributionSegments(contributions) {
+  if (!contributions) {
+    return [
+      { value: "Contribution summary unavailable without GitHub auth", color: "#94a3b8" }
+    ];
+  }
+
+  const segments = [
+    ...line("Period", contributions.period, "#94a3b8"),
+    ...line("Contributions", formatNumber(contributions.total), "#6ee7b7")
+  ];
+
+  if (contributions.commits !== null) {
+    segments.push(...line("Commits", formatNumber(contributions.commits), "#93c5fd"));
+  }
+
+  if (contributions.pullRequests !== null) {
+    segments.push(...line("Pull requests", formatNumber(contributions.pullRequests), "#c084fc"));
+  }
+
+  if (contributions.issues !== null) {
+    segments.push(...line("Issues", formatNumber(contributions.issues), "#fb7185"));
+  }
+
+  if (contributions.reviews !== null) {
+    segments.push(...line("Reviews", formatNumber(contributions.reviews), "#facc15"));
+  }
+
+  segments.push(
+    ...line("Active days", formatNumber(contributions.activeDays), "#8bd5ca"),
+    ...line(
+      "Best day",
+      `${contributions.bestDay.date} (${formatNumber(contributions.bestDay.contributionCount)})`,
+      "#a7f3d0"
+    )
+  );
+
+  if (contributions.restricted !== null) {
+    segments.push(...line("Private count", formatNumber(contributions.restricted), "#94a3b8"));
+  }
+
+  return segments;
+}
+
+function activitySegments(events) {
+  if (events.length === 0) {
+    return [{ value: "No recent public activity found", color: "#94a3b8" }];
+  }
+
+  return events.flatMap((event, index) => [
+    { value: `${event.date} `, color: "#94a3b8" },
+    { value: `${event.kind.padEnd(12)} `, color: event.color, bold: true },
+    { value: `${compact(event.detail, 54)}${index === events.length - 1 ? "" : "\n"}`, color: "#cbd5e1" }
+  ]);
+}
+
+function languageSegments(languages) {
+  if (languages.length === 0) {
+    return [{ value: "No language data found", color: "#94a3b8" }];
+  }
+
+  return languages.flatMap((language, index) => [
+    { value: `${language.language.padEnd(14)} `, color: "#93c5fd", bold: true },
+    { value: bar(language.percent), color: "#6ee7b7" },
+    { value: ` ${String(language.percent).padStart(3, " ")}%${index === languages.length - 1 ? "" : "\n"}`, color: "#cbd5e1" }
+  ]);
+}
+
+function describeEvent(event) {
+  const date = event.created_at.slice(0, 10);
+  const repo = event.repo?.name ?? "github";
+
+  switch (event.type) {
+    case "PushEvent": {
+      const count = event.payload?.commits?.length ?? 0;
+      return {
+        date,
+        kind: "push",
+        detail: count > 0 ? `${count} commit${count === 1 ? "" : "s"} to ${repo}` : `pushed to ${repo}`,
+        color: "#6ee7b7"
+      };
+    }
+    case "PullRequestEvent":
+      return {
+        date,
+        kind: "pull request",
+        detail: `${event.payload?.action ?? "updated"} ${repo}`,
+        color: "#c084fc"
+      };
+    case "IssuesEvent":
+      return {
+        date,
+        kind: "issue",
+        detail: `${event.payload?.action ?? "updated"} ${repo}`,
+        color: "#fb7185"
+      };
+    case "IssueCommentEvent":
+      return {
+        date,
+        kind: "comment",
+        detail: `commented on ${repo}`,
+        color: "#facc15"
+      };
+    case "PullRequestReviewEvent":
+      return {
+        date,
+        kind: "review",
+        detail: `${event.payload?.action ?? "reviewed"} ${repo}`,
+        color: "#8bd5ca"
+      };
+    case "CreateEvent":
+      return {
+        date,
+        kind: "create",
+        detail: `created ${event.payload?.ref_type ?? "ref"} in ${repo}`,
+        color: "#93c5fd"
+      };
+    case "WatchEvent":
+      return {
+        date,
+        kind: "star",
+        detail: `starred ${repo}`,
+        color: "#facc15"
+      };
+    case "ForkEvent":
+      return {
+        date,
+        kind: "fork",
+        detail: `forked ${repo}`,
+        color: "#c084fc"
+      };
+    case "ReleaseEvent":
+      return {
+        date,
+        kind: "release",
+        detail: `${event.payload?.action ?? "published"} ${repo}`,
+        color: "#6ee7b7"
+      };
+    default:
+      return {
+        date,
+        kind: event.type.replace(/Event$/, "").toLowerCase(),
+        detail: repo,
+        color: "#94a3b8"
+      };
   }
 }
 
@@ -165,33 +519,10 @@ function line(label, value, color, includeNewline = true) {
   ];
 }
 
-function repoSegments(repos) {
-  if (repos.length === 0) {
-    return [{ value: "No public repositories found", color: "#94a3b8" }];
-  }
-
-  return repos.flatMap((repo, index) => [
-    { value: `${String(index + 1).padStart(2, " ")}. `, color: "#475569" },
-    { value: compact(repo.name, 24).padEnd(24, " "), color: "#93c5fd", bold: true },
-    { value: ` stars ${String(repo.stargazers_count).padStart(4, " ")}`, color: "#facc15" },
-    { value: `  ${repo.language ?? "Unknown"}${index === repos.length - 1 ? "" : "\n"}`, color: "#cbd5e1" }
-  ]);
-}
-
-function summarizeLanguages(repos) {
-  const counts = new Map();
-
-  for (const repo of repos) {
-    if (!repo.language) {
-      continue;
-    }
-
-    counts.set(repo.language, (counts.get(repo.language) ?? 0) + 1);
-  }
-
-  return [...counts.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .map(([language]) => language);
+function bar(percent) {
+  const filled = Math.max(1, Math.round(percent / 10));
+  const empty = Math.max(0, 10 - filled);
+  return `[${"#".repeat(filled)}${"-".repeat(empty)}]`;
 }
 
 function compact(value, maxLength) {
@@ -204,6 +535,14 @@ function compact(value, maxLength) {
   return `${normalized.slice(0, maxLength - 1)}...`;
 }
 
+function formatError(error) {
+  return error instanceof Error ? error.message : String(error);
+}
+
 function formatNumber(value) {
   return new Intl.NumberFormat("en-US").format(value);
+}
+
+function parseNumber(value) {
+  return Number(value.replaceAll(",", ""));
 }
