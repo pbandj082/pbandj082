@@ -1,0 +1,40 @@
+name: Update README SVG
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 3 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node .github/scripts/update-profile-aboutty.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: pbandj082/aboutty/packages/action@action-v0
+        with:
+          config: aboutty.json
+          output: assets/aboutty.svg
+      - name: Commit README SVG
+        run: |
+          if git diff --quiet -- aboutty.json assets/aboutty.svg; then
+            echo "No README SVG changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add aboutty.json assets/aboutty.svg
+          git commit -m "chore: update readme aboutty svg [skip ci]"
+          git push
+

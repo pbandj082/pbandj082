@@ -1,0 +1,291 @@
+{
+  "$schema": "https://raw.githubusercontent.com/pbandj082/aboutty/main/schema/aboutty.schema.json",
+  "title": "github profile",
+  "username": "pbandj082",
+  "hostname": "github",
+  "prompt": "$",
+  "width": 860,
+  "padding": 24,
+  "fontSize": 14,
+  "lineHeight": 22,
+  "loop": true,
+  "stepIntervalMs": 28,
+  "theme": {
+    "background": "#101418",
+    "border": "#2a3138",
+    "title": "#d7dee6",
+    "username": "#6ee7b7",
+    "hostname": "#93c5fd",
+    "separator": "#8bd5ca",
+    "prompt": "#6ee7b7",
+    "text": "#f8fafc",
+    "command": "#f8fafc",
+    "output": "#cbd5e1"
+  },
+  "steps": [
+    {
+      "type": "command",
+      "text": "whoami"
+    },
+    {
+      "type": "output",
+      "typingIntervalMs": 0,
+      "text": "pbandj082"
+    },
+    {
+      "type": "command",
+      "text": "neofetch --source github --user pbandj082"
+    },
+    {
+      "type": "output",
+      "typingIntervalMs": 0,
+      "text": [
+        {
+          "value": "pbandj082@github\n",
+          "color": "#6ee7b7",
+          "bold": true
+        },
+        {
+          "value": "----------------\n",
+          "color": "#475569"
+        },
+        {
+          "value": "Name            ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "pbandj082\n",
+          "color": "#f8fafc",
+          "bold": true
+        },
+        {
+          "value": "Bio             ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "building software in public\n",
+          "color": "#cbd5e1",
+          "bold": true
+        },
+        {
+          "value": "Location        ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "remote\n",
+          "color": "#93c5fd",
+          "bold": true
+        },
+        {
+          "value": "Company         ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "independent\n",
+          "color": "#c084fc",
+          "bold": true
+        },
+        {
+          "value": "Followers       ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "10\n",
+          "color": "#facc15",
+          "bold": true
+        },
+        {
+          "value": "Following       ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "23\n",
+          "color": "#facc15",
+          "bold": true
+        },
+        {
+          "value": "Public repos    ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "6\n",
+          "color": "#6ee7b7",
+          "bold": true
+        },
+        {
+          "value": "Owned repos     ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "6\n",
+          "color": "#6ee7b7",
+          "bold": true
+        },
+        {
+          "value": "Total stars     ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "0\n",
+          "color": "#facc15",
+          "bold": true
+        },
+        {
+          "value": "Total forks     ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "0\n",
+          "color": "#c084fc",
+          "bold": true
+        },
+        {
+          "value": "Profile commits ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "0\n",
+          "color": "#6ee7b7",
+          "bold": true
+        },
+        {
+          "value": "Languages       ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "Dart, TypeScript, Lua, Python\n",
+          "color": "#8bd5ca",
+          "bold": true
+        },
+        {
+          "value": "Updated         ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "2026-06-23T20:31:13Z",
+          "color": "#94a3b8",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "command",
+      "text": "gh repo list pbandj082 --limit 5 --sort stargazers"
+    },
+    {
+      "type": "output",
+      "typingIntervalMs": 0,
+      "text": [
+        {
+          "value": " 1. ",
+          "color": "#475569"
+        },
+        {
+          "value": "pbandj082               ",
+          "color": "#93c5fd",
+          "bold": true
+        },
+        {
+          "value": " stars    0",
+          "color": "#facc15"
+        },
+        {
+          "value": "  Unknown\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": " 2. ",
+          "color": "#475569"
+        },
+        {
+          "value": "aboutty                 ",
+          "color": "#93c5fd",
+          "bold": true
+        },
+        {
+          "value": " stars    0",
+          "color": "#facc15"
+        },
+        {
+          "value": "  TypeScript\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": " 3. ",
+          "color": "#475569"
+        },
+        {
+          "value": "nvim                    ",
+          "color": "#93c5fd",
+          "bold": true
+        },
+        {
+          "value": " stars    0",
+          "color": "#facc15"
+        },
+        {
+          "value": "  Lua\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": " 4. ",
+          "color": "#475569"
+        },
+        {
+          "value": "my_py_stubs             ",
+          "color": "#93c5fd",
+          "bold": true
+        },
+        {
+          "value": " stars    0",
+          "color": "#facc15"
+        },
+        {
+          "value": "  Python\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": " 5. ",
+          "color": "#475569"
+        },
+        {
+          "value": "aspect_notifier         ",
+          "color": "#93c5fd",
+          "bold": true
+        },
+        {
+          "value": " stars    0",
+          "color": "#facc15"
+        },
+        {
+          "value": "  Dart",
+          "color": "#cbd5e1"
+        }
+      ]
+    },
+    {
+      "type": "command",
+      "text": "aboutty aboutty.json --out assets/aboutty.svg"
+    },
+    {
+      "type": "output",
+      "text": [
+        {
+          "value": "Rendering GitHub profile SVG"
+        },
+        {
+          "value": "...",
+          "repeat": 3,
+          "repeatDelayMs": 280,
+          "typingIntervalMs": 160,
+          "color": "#6ee7b7"
+        }
+      ]
+    },
+    {
+      "type": "output",
+      "typingIntervalMs": 0,
+      "text": "Generated assets/aboutty.svg"
+    }
+  ]
+}
