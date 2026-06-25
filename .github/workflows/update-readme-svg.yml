@@ -21,7 +21,7 @@ jobs:
       - run: node .github/scripts/update-profile-aboutty.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: pbandj082/aboutty/packages/action@action-v0
+      - uses: pbandj082/aboutty/packages/action@main
         with:
           config: aboutty.json
           output: assets/aboutty.svg
@@ -37,4 +37,3 @@ jobs:
           git add aboutty.json assets/aboutty.svg
           git commit -m "chore: update readme aboutty svg [skip ci]"
           git push
-

@@ -33,7 +33,7 @@ const config = {
   fontSize: 14,
   lineHeight: 22,
   loop: false,
-  stepIntervalMs: 20,
+  stepIntervalMs: 320,
   typingIntervalMs: 55,
   theme: {
     background: "#101418",
