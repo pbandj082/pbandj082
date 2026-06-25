@@ -5,6 +5,8 @@ import { promisify } from "node:util";
 const execFile = promisify(execFileCallback);
 const username = process.env.GITHUB_REPOSITORY_OWNER ?? "pbandj082";
 const outputPath = "aboutty.json";
+const recentActivityLimit = 5;
+const recentActivityFetchLimit = 100;
 const token = await resolveGitHubToken();
 const profileAsciiArt = String.raw` ____   ____      _     _   _  ____       _    ___    ___   ____  
 |  _ \ | __ )    / \   | \ | ||  _ \     | |  / _ \  ( _ ) |___ \ 
@@ -13,13 +15,11 @@ const profileAsciiArt = String.raw` ____   ____      _     _   _  ____       _  
 |_|    |____/ /_/   \_\|_| \_||____/  \___/   \___/  \___/ |_____|`;
 
 const user = await fetchJson(`https://api.github.com/users/${username}`, token);
-const [repos, events, contributions] = await Promise.all([
-  fetchRepos(username),
+const [events, contributions, pinnedRepositories] = await Promise.all([
   fetchRecentEvents(username),
-  fetchContributions(username)
+  fetchContributions(username),
+  fetchPinnedRepositories(username)
 ]);
-const ownRepos = repos.filter((repo) => !repo.fork);
-const languages = await fetchLanguageBreakdown(ownRepos);
 const updatedAt = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
 
 const config = {
@@ -28,12 +28,13 @@ const config = {
   username,
   hostname: "github",
   prompt: "$",
-  width: 860,
+  width: 900,
   padding: 24,
   fontSize: 14,
   lineHeight: 22,
-  loop: true,
-  stepIntervalMs: 28,
+  loop: false,
+  stepIntervalMs: 20,
+  typingIntervalMs: 55,
   theme: {
     background: "#101418",
     border: "#2a3138",
@@ -71,6 +72,7 @@ const config = {
       type: "output",
       typingIntervalMs: 0,
       text: [
+        ...spinnerLine("Profile", "profile metadata ready", "#93c5fd"),
         { value: `${username}@github\n`, color: "#6ee7b7", bold: true },
         { value: "----------------\n", color: "#475569" },
         ...line("Name", user.name ?? username, "#f8fafc"),
@@ -92,21 +94,21 @@ const config = {
     },
     {
       type: "command",
-      text: `gh api users/${username}/events/public --jq '.[0:5]'`
+      text: `gh api graphql --field login=${username} --field query=pinnedItems`
+    },
+    {
+      type: "output",
+      typingIntervalMs: 0,
+      text: pinnedRepositorySegments(pinnedRepositories)
+    },
+    {
+      type: "command",
+      text: `gh activity --limit ${recentActivityLimit}`
     },
     {
       type: "output",
       typingIntervalMs: 0,
       text: activitySegments(events)
-    },
-    {
-      type: "command",
-      text: `github-linguist --user ${username} --summary`
-    },
-    {
-      type: "output",
-      typingIntervalMs: 0,
-      text: languageSegments(languages)
     }
   ]
 };
@@ -114,29 +116,86 @@ const config = {
 await writeFile(outputPath, `${JSON.stringify(config, null, 2)}\n`);
 console.log(`Updated ${outputPath}`);
 
-async function fetchRepos(owner) {
-  const repos = [];
+async function fetchPinnedRepositories(login) {
+  if (token) {
+    const query = `
+      query PinnedRepositories($login: String!) {
+        user(login: $login) {
+          pinnedItems(first: 6, types: REPOSITORY) {
+            nodes {
+              ... on Repository {
+                name
+                nameWithOwner
+                description
+                url
+                stargazerCount
+                forkCount
+                updatedAt
+                pushedAt
+                primaryLanguage {
+                  name
+                  color
+                }
+                languages(first: 4, orderBy: { field: SIZE, direction: DESC }) {
+                  edges {
+                    size
+                    node {
+                      name
+                      color
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
 
-  for (let page = 1; page <= 10; page += 1) {
-    const batch = await fetchJson(
-      `https://api.github.com/users/${owner}/repos?type=owner&sort=updated&per_page=100&page=${page}`,
-      token
-    );
-
-    repos.push(...batch);
-
-    if (batch.length < 100) {
-      break;
+    try {
+      const result = await fetchGraphQL(query, { login }, token);
+      return (result?.data?.user?.pinnedItems?.nodes ?? [])
+        .filter(Boolean)
+        .map(normalizePinnedRepository);
+    } catch (error) {
+      console.warn(`Could not fetch pinned repositories through GraphQL: ${formatError(error)}`);
     }
   }
 
-  return repos;
+  return await fetchPinnedRepositoriesFromProfile(login);
+}
+
+async function fetchPinnedRepositoriesFromProfile(login) {
+  try {
+    const response = await fetch(`https://github.com/${login}`, {
+      headers: {
+        "User-Agent": "aboutty-profile-readme"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`GitHub profile request failed: ${response.status} ${response.statusText}`);
+    }
+
+    const html = await response.text();
+    const pinnedSection = html.match(/<ol[^>]*js-pinned-items-reorder-list[\s\S]*?<\/ol>/)?.[0] ?? "";
+
+    return [...pinnedSection.matchAll(/<li[\s\S]*?pinned-item-list-item[\s\S]*?<\/li>/g)]
+      .map((match) => parsePinnedRepositoryCard(match[0]))
+      .filter(Boolean);
+  } catch (error) {
+    console.warn(`Could not fetch pinned repositories from public profile: ${formatError(error)}`);
+    return [];
+  }
 }
 
 async function fetchRecentEvents(owner) {
   try {
-    const events = await fetchJson(`https://api.github.com/users/${owner}/events/public?per_page=30`, token);
-    return events.map(describeEvent).filter(Boolean).slice(0, 5);
+    const events = await fetchJson(
+      `https://api.github.com/users/${owner}/events/public?per_page=${recentActivityFetchLimit}`,
+      token
+    );
+    return events.map(describeEvent).filter(Boolean).slice(0, recentActivityLimit);
   } catch (error) {
     console.warn(`Could not fetch recent activity: ${formatError(error)}`);
     return [];
@@ -267,40 +326,6 @@ async function fetchPublicContributions(login, from, to) {
   }
 }
 
-async function fetchLanguageBreakdown(repos) {
-  const totals = new Map();
-  const targetRepos = repos.slice(0, 30);
-  const languageMaps = await Promise.all(
-    targetRepos.map(async (repo) => {
-      try {
-        return await fetchJson(repo.languages_url, token);
-      } catch {
-        return {};
-      }
-    })
-  );
-
-  for (const languageMap of languageMaps) {
-    for (const [language, bytes] of Object.entries(languageMap)) {
-      totals.set(language, (totals.get(language) ?? 0) + bytes);
-    }
-  }
-
-  const totalBytes = [...totals.values()].reduce((sum, bytes) => sum + bytes, 0);
-
-  if (totalBytes === 0) {
-    return [];
-  }
-
-  return [...totals.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 6)
-    .map(([language, bytes]) => ({
-      language,
-      percent: Math.round((bytes / totalBytes) * 100)
-    }));
-}
-
 async function fetchJson(url, activeToken) {
   const response = await fetch(url, {
     headers: createGitHubHeaders(activeToken)
@@ -364,6 +389,73 @@ async function resolveGitHubToken() {
   }
 }
 
+function normalizePinnedRepository(repository) {
+  const languageEdges = repository.languages?.edges ?? [];
+  const totalLanguageSize = languageEdges.reduce((sum, edge) => sum + edge.size, 0);
+  const languages = totalLanguageSize > 0
+    ? languageEdges.map((edge) => ({
+        language: edge.node.name,
+        color: edge.node.color,
+        percent: Math.round((edge.size / totalLanguageSize) * 100)
+      }))
+    : [];
+
+  if (languages.length === 0 && repository.primaryLanguage?.name) {
+    languages.push({
+      language: repository.primaryLanguage.name,
+      color: repository.primaryLanguage.color,
+      percent: 100
+    });
+  }
+
+  return {
+    name: repository.name,
+    nameWithOwner: repository.nameWithOwner,
+    description: repository.description,
+    url: repository.url,
+    stars: repository.stargazerCount,
+    forks: repository.forkCount,
+    updatedAt: repository.pushedAt ?? repository.updatedAt,
+    primaryLanguage: repository.primaryLanguage,
+    languages
+  };
+}
+
+function parsePinnedRepositoryCard(card) {
+  const pathMatch = card.match(/href="\/([^"]+)"[^>]*class="[^"]*text-bold[^"]*wb-break-word/);
+
+  if (!pathMatch) {
+    return null;
+  }
+
+  const nameWithOwner = decodeHtml(pathMatch[1]);
+  const name = nameWithOwner.split("/").at(-1) ?? nameWithOwner;
+  const descriptionMatch = card.match(/<p class="pinned-item-desc[^"]*"[^>]*>\s*([\s\S]*?)\s*<\/p>/);
+  const languageMatch = card.match(/itemprop="programmingLanguage">([^<]+)<\/span>/);
+  const languageColorMatch = card.match(/repo-language-color" style="background-color:\s*([^"]+)"/);
+  const starsMatch = card.match(/\/stargazers"[\s\S]*?<\/svg>\s*([\d,.kK]+)/);
+  const primaryLanguage = languageMatch
+    ? {
+        name: decodeHtml(languageMatch[1]),
+        color: languageColorMatch?.[1] ?? "#93c5fd"
+      }
+    : null;
+
+  return {
+    name,
+    nameWithOwner,
+    description: descriptionMatch ? decodeHtml(stripHtml(descriptionMatch[1]).trim()) : null,
+    url: `https://github.com/${nameWithOwner}`,
+    stars: starsMatch ? parseGitHubCount(starsMatch[1]) : 0,
+    forks: 0,
+    updatedAt: null,
+    primaryLanguage,
+    languages: primaryLanguage
+      ? [{ language: primaryLanguage.name, color: primaryLanguage.color, percent: 100 }]
+      : []
+  };
+}
+
 function contributionSegments(contributions) {
   if (!contributions) {
     return [
@@ -410,26 +502,70 @@ function contributionSegments(contributions) {
 
 function activitySegments(events) {
   if (events.length === 0) {
-    return [{ value: "No recent public activity found", color: "#94a3b8" }];
+    return [
+      { value: "No recent public activity found", color: "#94a3b8" }
+    ];
   }
 
-  return events.flatMap((event, index) => [
-    { value: `${event.date} `, color: "#94a3b8" },
-    { value: `${event.kind.padEnd(12)} `, color: event.color, bold: true },
-    { value: `${compact(event.detail, 54)}${index === events.length - 1 ? "" : "\n"}`, color: "#cbd5e1" }
-  ]);
+  return [
+    ...events.flatMap((event, index) => [
+      { value: `${event.date} `, color: "#94a3b8" },
+      { value: `${event.kind.padEnd(12)} `, color: event.color, bold: true },
+      { value: `${compact(event.detail, 54)}${index === events.length - 1 ? "" : "\n"}`, color: "#cbd5e1" }
+    ])
+  ];
 }
 
-function languageSegments(languages) {
-  if (languages.length === 0) {
-    return [{ value: "No language data found", color: "#94a3b8" }];
+function pinnedRepositorySegments(repositories) {
+  if (repositories.length === 0) {
+    return [
+      { value: "No pinned repositories found", color: "#94a3b8" }
+    ];
   }
 
+  const segments = [
+    ...line("Pinned repos", formatNumber(repositories.length), "#c084fc"),
+    { value: "Repository                    lang       stars forks updated\n", color: "#475569" }
+  ];
+
+  for (const [index, repository] of repositories.entries()) {
+    const language = repository.primaryLanguage?.name ?? "unknown";
+    const languageColor = repository.primaryLanguage?.color ?? "#93c5fd";
+    const updatedAt = repository.updatedAt ? repository.updatedAt.slice(0, 10) : "unknown";
+    segments.push(
+      { value: `${compact(repository.nameWithOwner, 28).padEnd(28)} `, color: "#f8fafc", bold: true },
+      { value: `${language.padEnd(10)} `, color: languageColor, bold: true },
+      { value: `${String(repository.stars).padStart(3, " ")}   `, color: "#facc15" },
+      { value: `${String(repository.forks).padStart(3, " ")}   `, color: "#8bd5ca" },
+      { value: `${updatedAt}\n`, color: "#94a3b8" }
+    );
+
+    if (repository.description) {
+      segments.push({ value: `  ${compact(repository.description, 70)}\n`, color: "#94a3b8" });
+    }
+
+    if (repository.languages.length > 0) {
+      segments.push(...progressBarLines(repository.languages.slice(0, 3)));
+      if (index !== repositories.length - 1) {
+        segments.push({ value: "\n", color: "#475569" });
+      }
+    }
+  }
+
+  return segments;
+}
+
+function progressBarLines(languages) {
   return languages.flatMap((language, index) => [
-    { value: `${language.language.padEnd(14)} `, color: "#93c5fd", bold: true },
-    { value: bar(language.percent), color: "#6ee7b7" },
-    { value: ` ${String(language.percent).padStart(3, " ")}%${index === languages.length - 1 ? "" : "\n"}`, color: "#cbd5e1" }
-  ]);
+      { value: `${language.language.padEnd(14)} `, color: "#93c5fd", bold: true },
+      {
+        frames: filledBarFrames(language.percent),
+        frameIntervalMs: 95,
+        color: "#6ee7b7",
+        bold: true
+      },
+      { value: ` ${String(language.percent).padStart(3, " ")}%${index === languages.length - 1 ? "" : "\n"}`, color: "#cbd5e1" }
+    ]);
 }
 
 function describeEvent(event) {
@@ -502,6 +638,8 @@ function describeEvent(event) {
         detail: `${event.payload?.action ?? "published"} ${repo}`,
         color: "#6ee7b7"
       };
+    case "DeleteEvent":
+      return null;
     default:
       return {
         date,
@@ -519,10 +657,51 @@ function line(label, value, color, includeNewline = true) {
   ];
 }
 
-function bar(percent) {
-  const filled = Math.max(1, Math.round(percent / 10));
-  const empty = Math.max(0, 10 - filled);
-  return `[${"#".repeat(filled)}${"-".repeat(empty)}]`;
+function spinnerLine(label, message, color, doneFrame = "ok") {
+  return [
+    { value: `${label.padEnd(15)} `, color: "#94a3b8" },
+    {
+      frames: spinnerFrames(doneFrame, color),
+      frameIntervalMs: 140
+    },
+    { value: ` ${message}\n`, color: "#cbd5e1" }
+  ];
+}
+
+function spinnerFrames(doneFrame, color) {
+  return [
+    "|", "/", "-", "\\",
+    "|", "/", "-", "\\",
+    "|", "/", "-", "\\",
+    doneFrame
+  ].map((value, index, frames) => ({
+    value,
+    color: index === frames.length - 1 && doneFrame === "ok" ? "#6ee7b7" : color,
+    bold: index === frames.length - 1
+  }));
+}
+
+function filledBarFrames(percent) {
+  const checkpoints = [0, 20, 40, 60, 80, 100]
+    .map((ratio) => Math.round((percent * ratio) / 100))
+    .filter((value, index, values) => index === 0 || value !== values[index - 1]);
+
+  if (checkpoints.at(-1) !== percent) {
+    checkpoints.push(percent);
+  }
+
+  return checkpoints.map((checkpoint) => ({
+    value: filledBar(checkpoint),
+    color: checkpoint === percent ? "#6ee7b7" : "#8bd5ca",
+    bold: checkpoint === percent
+  }));
+}
+
+function filledBar(percent) {
+  const width = 12;
+  const filled = percent <= 0 ? 0 : Math.max(1, Math.round((percent / 100) * width));
+  const empty = Math.max(0, width - filled);
+  return `[${"█".repeat(filled)}${".".repeat(empty)}]`;
 }
 
 function compact(value, maxLength) {
@@ -545,4 +724,29 @@ function formatNumber(value) {
 
 function parseNumber(value) {
   return Number(value.replaceAll(",", ""));
+}
+
+function parseGitHubCount(value) {
+  const normalized = value.trim().replaceAll(",", "").toLowerCase();
+
+  if (normalized.endsWith("k")) {
+    return Math.round(Number(normalized.slice(0, -1)) * 1000);
+  }
+
+  return Number(normalized);
+}
+
+function stripHtml(value) {
+  return value.replace(/<[^>]*>/g, " ");
+}
+
+function decodeHtml(value) {
+  return value
+    .replaceAll("&amp;", "&")
+    .replaceAll("&quot;", "\"")
+    .replaceAll("&#39;", "'")
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">")
+    .replace(/\s+/g, " ")
+    .trim();
 }

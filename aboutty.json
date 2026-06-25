@@ -4,12 +4,13 @@
   "username": "pbandj082",
   "hostname": "github",
   "prompt": "$",
-  "width": 860,
+  "width": 900,
   "padding": 24,
   "fontSize": 14,
   "lineHeight": 22,
-  "loop": true,
-  "stepIntervalMs": 28,
+  "loop": false,
+  "stepIntervalMs": 20,
+  "typingIntervalMs": 55,
   "theme": {
     "background": "#101418",
     "border": "#2a3138",
@@ -51,6 +52,84 @@
       "type": "output",
       "typingIntervalMs": 0,
       "text": [
+        {
+          "value": "Profile         ",
+          "color": "#94a3b8"
+        },
+        {
+          "frames": [
+            {
+              "value": "|",
+              "color": "#93c5fd",
+              "bold": false
+            },
+            {
+              "value": "/",
+              "color": "#93c5fd",
+              "bold": false
+            },
+            {
+              "value": "-",
+              "color": "#93c5fd",
+              "bold": false
+            },
+            {
+              "value": "\\",
+              "color": "#93c5fd",
+              "bold": false
+            },
+            {
+              "value": "|",
+              "color": "#93c5fd",
+              "bold": false
+            },
+            {
+              "value": "/",
+              "color": "#93c5fd",
+              "bold": false
+            },
+            {
+              "value": "-",
+              "color": "#93c5fd",
+              "bold": false
+            },
+            {
+              "value": "\\",
+              "color": "#93c5fd",
+              "bold": false
+            },
+            {
+              "value": "|",
+              "color": "#93c5fd",
+              "bold": false
+            },
+            {
+              "value": "/",
+              "color": "#93c5fd",
+              "bold": false
+            },
+            {
+              "value": "-",
+              "color": "#93c5fd",
+              "bold": false
+            },
+            {
+              "value": "\\",
+              "color": "#93c5fd",
+              "bold": false
+            },
+            {
+              "value": "ok",
+              "color": "#6ee7b7",
+              "bold": true
+            }
+          ],
+          "frameIntervalMs": 140
+        },
+        {
+          "value": " profile metadata ready\n",
+          "color": "#cbd5e1"
+        },
         {
           "value": "pbandj082@github\n",
           "color": "#6ee7b7",
@@ -110,7 +189,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-06-23T21:13:44Z",
+          "value": "2026-06-25T14:05:45Z",
           "color": "#94a3b8",
           "bold": true
         }
@@ -138,7 +217,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "1,036\n",
+          "value": "1,073\n",
           "color": "#6ee7b7",
           "bold": true
         },
@@ -147,7 +226,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "129\n",
+          "value": "130\n",
           "color": "#8bd5ca",
           "bold": true
         },
@@ -164,29 +243,171 @@
     },
     {
       "type": "command",
-      "text": "gh api users/pbandj082/events/public --jq '.[0:5]'"
+      "text": "gh api graphql --field login=pbandj082 --field query=pinnedItems"
     },
     {
       "type": "output",
       "typingIntervalMs": 0,
       "text": [
         {
-          "value": "No recent public activity found",
+          "value": "Pinned repos    ",
           "color": "#94a3b8"
+        },
+        {
+          "value": "1\n",
+          "color": "#c084fc",
+          "bold": true
+        },
+        {
+          "value": "Repository                    lang       stars forks updated\n",
+          "color": "#475569"
+        },
+        {
+          "value": "Lethephobia/appletheia       ",
+          "color": "#f8fafc",
+          "bold": true
+        },
+        {
+          "value": "Rust       ",
+          "color": "#dea584",
+          "bold": true
+        },
+        {
+          "value": "  1   ",
+          "color": "#facc15"
+        },
+        {
+          "value": "  0   ",
+          "color": "#8bd5ca"
+        },
+        {
+          "value": "2026-05-08\n",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "  Event sourcing application base interfaces.\n",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "Rust           ",
+          "color": "#dea584",
+          "bold": true
+        },
+        {
+          "frames": [
+            {
+              "value": "[............]",
+              "color": "#8bd5ca",
+              "bold": false
+            },
+            {
+              "value": "[██..........]",
+              "color": "#8bd5ca",
+              "bold": false
+            },
+            {
+              "value": "[█████.......]",
+              "color": "#8bd5ca",
+              "bold": false
+            },
+            {
+              "value": "[███████.....]",
+              "color": "#8bd5ca",
+              "bold": false
+            },
+            {
+              "value": "[██████████..]",
+              "color": "#8bd5ca",
+              "bold": false
+            },
+            {
+              "value": "[████████████]",
+              "color": "#6ee7b7",
+              "bold": true
+            }
+          ],
+          "frameIntervalMs": 95,
+          "color": "#6ee7b7",
+          "bold": true
+        },
+        {
+          "value": " 100%",
+          "color": "#cbd5e1"
         }
       ]
     },
     {
       "type": "command",
-      "text": "github-linguist --user pbandj082 --summary"
+      "text": "gh activity --limit 5"
     },
     {
       "type": "output",
       "typingIntervalMs": 0,
       "text": [
         {
-          "value": "No language data found",
+          "value": "2026-06-25 ",
           "color": "#94a3b8"
+        },
+        {
+          "value": "push         ",
+          "color": "#6ee7b7",
+          "bold": true
+        },
+        {
+          "value": "2 commits to pbandj082/aboutty\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-06-25 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "activity     ",
+          "color": "#94a3b8",
+          "bold": true
+        },
+        {
+          "value": "contributed to pbandj082/aboutty\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-06-25 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "push         ",
+          "color": "#6ee7b7",
+          "bold": true
+        },
+        {
+          "value": "2 commits to pbandj082/aboutty\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-06-25 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "activity     ",
+          "color": "#94a3b8",
+          "bold": true
+        },
+        {
+          "value": "contributed to pbandj082/aboutty\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-06-25 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "create       ",
+          "color": "#93c5fd",
+          "bold": true
+        },
+        {
+          "value": "created ref in pbandj082/aboutty",
+          "color": "#cbd5e1"
         }
       ]
     }
