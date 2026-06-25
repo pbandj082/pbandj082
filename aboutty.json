@@ -9,6 +9,11 @@
   "fontSize": 14,
   "lineHeight": 22,
   "loop": false,
+  "cursor": {
+    "enabled": true,
+    "style": "block",
+    "blinkIntervalMs": 600
+  },
   "stepIntervalMs": 320,
   "typingIntervalMs": 55,
   "theme": {
@@ -21,7 +26,8 @@
     "prompt": "#6ee7b7",
     "text": "#f8fafc",
     "command": "#f8fafc",
-    "output": "#cbd5e1"
+    "output": "#cbd5e1",
+    "cursor": "#f8fafc"
   },
   "steps": [
     {
@@ -153,7 +159,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "building software in public\n",
+          "value": "Building developer tools and event-sourced systems.\n",
           "color": "#cbd5e1",
           "bold": true
         },
@@ -162,7 +168,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "remote\n",
+          "value": "Japan\n",
           "color": "#93c5fd",
           "bold": true
         },
@@ -189,7 +195,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-06-25T14:05:45Z",
+          "value": "2026-06-25T19:11:15Z",
           "color": "#94a3b8",
           "bold": true
         }
@@ -217,7 +223,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "1,073\n",
+          "value": "1,084\n",
           "color": "#6ee7b7",
           "bold": true
         },
@@ -226,7 +232,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "130\n",
+          "value": "131\n",
           "color": "#8bd5ca",
           "bold": true
         },
@@ -281,7 +287,7 @@
           "color": "#8bd5ca"
         },
         {
-          "value": "2026-05-08\n",
+          "value": "2026-06-19\n",
           "color": "#94a3b8"
         },
         {
@@ -354,7 +360,7 @@
           "bold": true
         },
         {
-          "value": "2 commits to pbandj082/aboutty\n",
+          "value": "pushed to pbandj082/aboutty\n",
           "color": "#cbd5e1"
         },
         {
@@ -362,12 +368,25 @@
           "color": "#94a3b8"
         },
         {
-          "value": "activity     ",
-          "color": "#94a3b8",
+          "value": "pull request ",
+          "color": "#c084fc",
           "bold": true
         },
         {
-          "value": "contributed to pbandj082/aboutty\n",
+          "value": "merged pbandj082/aboutty\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-06-25 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "pull request ",
+          "color": "#c084fc",
+          "bold": true
+        },
+        {
+          "value": "merged pbandj082/aboutty\n",
           "color": "#cbd5e1"
         },
         {
@@ -380,7 +399,7 @@
           "bold": true
         },
         {
-          "value": "2 commits to pbandj082/aboutty\n",
+          "value": "pushed to pbandj082/aboutty\n",
           "color": "#cbd5e1"
         },
         {
@@ -388,25 +407,12 @@
           "color": "#94a3b8"
         },
         {
-          "value": "activity     ",
-          "color": "#94a3b8",
+          "value": "pull request ",
+          "color": "#c084fc",
           "bold": true
         },
         {
-          "value": "contributed to pbandj082/aboutty\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-06-25 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "create       ",
-          "color": "#93c5fd",
-          "bold": true
-        },
-        {
-          "value": "created ref in pbandj082/aboutty",
+          "value": "opened pbandj082/aboutty",
           "color": "#cbd5e1"
         }
       ]

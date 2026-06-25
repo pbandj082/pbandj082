@@ -33,6 +33,11 @@ const config = {
   fontSize: 14,
   lineHeight: 22,
   loop: false,
+  cursor: {
+    enabled: true,
+    style: "block",
+    blinkIntervalMs: 600
+  },
   stepIntervalMs: 320,
   typingIntervalMs: 55,
   theme: {
@@ -45,7 +50,8 @@ const config = {
     prompt: "#6ee7b7",
     text: "#f8fafc",
     command: "#f8fafc",
-    output: "#cbd5e1"
+    output: "#cbd5e1",
+    cursor: "#f8fafc"
   },
   steps: [
     {
@@ -180,9 +186,11 @@ async function fetchPinnedRepositoriesFromProfile(login) {
     const html = await response.text();
     const pinnedSection = html.match(/<ol[^>]*js-pinned-items-reorder-list[\s\S]*?<\/ol>/)?.[0] ?? "";
 
-    return [...pinnedSection.matchAll(/<li[\s\S]*?pinned-item-list-item[\s\S]*?<\/li>/g)]
+    const repositories = [...pinnedSection.matchAll(/<li[\s\S]*?pinned-item-list-item[\s\S]*?<\/li>/g)]
       .map((match) => parsePinnedRepositoryCard(match[0]))
       .filter(Boolean);
+
+    return await Promise.all(repositories.map(enrichPublicPinnedRepository));
   } catch (error) {
     console.warn(`Could not fetch pinned repositories from public profile: ${formatError(error)}`);
     return [];
@@ -394,10 +402,10 @@ function normalizePinnedRepository(repository) {
   const totalLanguageSize = languageEdges.reduce((sum, edge) => sum + edge.size, 0);
   const languages = totalLanguageSize > 0
     ? languageEdges.map((edge) => ({
-        language: edge.node.name,
-        color: edge.node.color,
-        percent: Math.round((edge.size / totalLanguageSize) * 100)
-      }))
+      language: edge.node.name,
+      color: edge.node.color,
+      percent: Math.round((edge.size / totalLanguageSize) * 100)
+    }))
     : [];
 
   if (languages.length === 0 && repository.primaryLanguage?.name) {
@@ -436,9 +444,9 @@ function parsePinnedRepositoryCard(card) {
   const starsMatch = card.match(/\/stargazers"[\s\S]*?<\/svg>\s*([\d,.kK]+)/);
   const primaryLanguage = languageMatch
     ? {
-        name: decodeHtml(languageMatch[1]),
-        color: languageColorMatch?.[1] ?? "#93c5fd"
-      }
+      name: decodeHtml(languageMatch[1]),
+      color: languageColorMatch?.[1] ?? "#93c5fd"
+    }
     : null;
 
   return {
@@ -454,6 +462,60 @@ function parsePinnedRepositoryCard(card) {
       ? [{ language: primaryLanguage.name, color: primaryLanguage.color, percent: 100 }]
       : []
   };
+}
+
+async function enrichPublicPinnedRepository(repository) {
+  try {
+    const [details, languagesByName] = await Promise.all([
+      fetchJson(`https://api.github.com/repos/${repository.nameWithOwner}`, token),
+      fetchJson(`https://api.github.com/repos/${repository.nameWithOwner}/languages`, token).catch(() => null)
+    ]);
+    const primaryLanguageName = details.language ?? repository.primaryLanguage?.name;
+    const primaryLanguage = primaryLanguageName
+      ? {
+        name: primaryLanguageName,
+        color: languageColor(primaryLanguageName, repository.primaryLanguage?.color)
+      }
+      : repository.primaryLanguage;
+    const languages = normalizeLanguageMap(languagesByName, primaryLanguageName);
+
+    return {
+      ...repository,
+      name: details.name ?? repository.name,
+      nameWithOwner: details.full_name ?? repository.nameWithOwner,
+      description: details.description ?? repository.description,
+      url: details.html_url ?? repository.url,
+      stars: details.stargazers_count ?? repository.stars,
+      forks: details.forks_count ?? repository.forks,
+      updatedAt: details.pushed_at ?? details.updated_at ?? repository.updatedAt,
+      primaryLanguage,
+      languages: languages.length > 0 ? languages : repository.languages
+    };
+  } catch (error) {
+    console.warn(`Could not enrich pinned repository ${repository.nameWithOwner}: ${formatError(error)}`);
+    return repository;
+  }
+}
+
+function normalizeLanguageMap(languagesByName, primaryLanguageName) {
+  if (!languagesByName || typeof languagesByName !== "object") {
+    return [];
+  }
+
+  const entries = Object.entries(languagesByName)
+    .filter(([, size]) => typeof size === "number" && size > 0)
+    .sort(([, leftSize], [, rightSize]) => rightSize - leftSize);
+  const totalSize = entries.reduce((sum, [, size]) => sum + size, 0);
+
+  if (totalSize <= 0) {
+    return [];
+  }
+
+  return entries.map(([language, size]) => ({
+    language,
+    color: languageColor(language, language === primaryLanguageName ? undefined : null),
+    percent: Math.max(1, Math.round((size / totalSize) * 100))
+  }));
 }
 
 function contributionSegments(contributions) {
@@ -557,15 +619,15 @@ function pinnedRepositorySegments(repositories) {
 
 function progressBarLines(languages) {
   return languages.flatMap((language, index) => [
-      { value: `${language.language.padEnd(14)} `, color: "#93c5fd", bold: true },
-      {
-        frames: filledBarFrames(language.percent),
-        frameIntervalMs: 95,
-        color: "#6ee7b7",
-        bold: true
-      },
-      { value: ` ${String(language.percent).padStart(3, " ")}%${index === languages.length - 1 ? "" : "\n"}`, color: "#cbd5e1" }
-    ]);
+    { value: `${language.language.padEnd(14)} `, color: language.color ?? "#93c5fd", bold: true },
+    {
+      frames: filledBarFrames(language.percent),
+      frameIntervalMs: 95,
+      color: "#6ee7b7",
+      bold: true
+    },
+    { value: ` ${String(language.percent).padStart(3, " ")}%${index === languages.length - 1 ? "" : "\n"}`, color: "#cbd5e1" }
+  ]);
 }
 
 function describeEvent(event) {
@@ -734,6 +796,23 @@ function parseGitHubCount(value) {
   }
 
   return Number(normalized);
+}
+
+function languageColor(language, fallback = "#93c5fd") {
+  const colors = {
+    CSS: "#663399",
+    Go: "#00add8",
+    HTML: "#e34c26",
+    JavaScript: "#f1e05a",
+    Python: "#3572a5",
+    Ruby: "#701516",
+    Rust: "#dea584",
+    Shell: "#89e051",
+    Swift: "#f05138",
+    TypeScript: "#3178c6"
+  };
+
+  return colors[language] ?? fallback ?? "#93c5fd";
 }
 
 function stripHtml(value) {
