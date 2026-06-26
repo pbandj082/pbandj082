@@ -195,7 +195,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-06-25T19:11:15Z",
+          "value": "2026-06-26T00:52:45Z",
           "color": "#94a3b8",
           "bold": true
         }
@@ -214,7 +214,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026 public calendar\n",
+          "value": "2025-06-26..2026-06-26\n",
           "color": "#94a3b8",
           "bold": true
         },
@@ -223,8 +223,44 @@
           "color": "#94a3b8"
         },
         {
-          "value": "1,084\n",
+          "value": "2,072\n",
           "color": "#6ee7b7",
+          "bold": true
+        },
+        {
+          "value": "Commits         ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "673\n",
+          "color": "#93c5fd",
+          "bold": true
+        },
+        {
+          "value": "Pull requests   ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "107\n",
+          "color": "#c084fc",
+          "bold": true
+        },
+        {
+          "value": "Issues          ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "2\n",
+          "color": "#fb7185",
+          "bold": true
+        },
+        {
+          "value": "Reviews         ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "4\n",
+          "color": "#facc15",
           "bold": true
         },
         {
@@ -232,7 +268,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "131\n",
+          "value": "245\n",
           "color": "#8bd5ca",
           "bold": true
         },
@@ -241,8 +277,17 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-03-16 (41)\n",
+          "value": "2025-10-24 (52)\n",
           "color": "#a7f3d0",
+          "bold": true
+        },
+        {
+          "value": "Private count   ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "1,283\n",
+          "color": "#94a3b8",
           "bold": true
         }
       ]
@@ -351,7 +396,7 @@
       "typingIntervalMs": 0,
       "text": [
         {
-          "value": "2026-06-25 ",
+          "value": "2026-06-26 ",
           "color": "#94a3b8"
         },
         {
@@ -364,33 +409,20 @@
           "color": "#cbd5e1"
         },
         {
-          "value": "2026-06-25 ",
+          "value": "2026-06-26 ",
           "color": "#94a3b8"
         },
         {
-          "value": "pull request ",
-          "color": "#c084fc",
+          "value": "push         ",
+          "color": "#6ee7b7",
           "bold": true
         },
         {
-          "value": "merged pbandj082/aboutty\n",
+          "value": "pushed to pbandj082/pbandj082\n",
           "color": "#cbd5e1"
         },
         {
-          "value": "2026-06-25 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "pull request ",
-          "color": "#c084fc",
-          "bold": true
-        },
-        {
-          "value": "merged pbandj082/aboutty\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-06-25 ",
+          "value": "2026-06-26 ",
           "color": "#94a3b8"
         },
         {
@@ -403,7 +435,20 @@
           "color": "#cbd5e1"
         },
         {
-          "value": "2026-06-25 ",
+          "value": "2026-06-26 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "pull request ",
+          "color": "#c084fc",
+          "bold": true
+        },
+        {
+          "value": "merged pbandj082/aboutty\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-06-26 ",
           "color": "#94a3b8"
         },
         {
