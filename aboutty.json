@@ -195,7 +195,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-07-01T04:56:54Z",
+          "value": "2026-07-02T04:45:47Z",
           "color": "#94a3b8",
           "bold": true
         }
@@ -214,7 +214,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2025-07-01..2026-07-01\n",
+          "value": "2025-07-02..2026-07-02\n",
           "color": "#94a3b8",
           "bold": true
         },
@@ -223,7 +223,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2,070\n",
+          "value": "2,073\n",
           "color": "#6ee7b7",
           "bold": true
         },
@@ -268,7 +268,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "245\n",
+          "value": "246\n",
           "color": "#8bd5ca",
           "bold": true
         },
@@ -286,7 +286,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "1,276\n",
+          "value": "1,279\n",
           "color": "#94a3b8",
           "bold": true
         }
@@ -409,7 +409,7 @@
           "color": "#cbd5e1"
         },
         {
-          "value": "2026-06-29 ",
+          "value": "2026-07-01 ",
           "color": "#94a3b8"
         },
         {
@@ -422,33 +422,7 @@
           "color": "#cbd5e1"
         },
         {
-          "value": "2026-06-29 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "star         ",
-          "color": "#facc15",
-          "bold": true
-        },
-        {
-          "value": "starred fraktalio/fmodel-decider-rust\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-06-29 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "star         ",
-          "color": "#facc15",
-          "bold": true
-        },
-        {
-          "value": "starred jito-foundation/jito-relayer\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-06-26 ",
+          "value": "2026-07-01 ",
           "color": "#94a3b8"
         },
         {
@@ -457,7 +431,33 @@
           "bold": true
         },
         {
-          "value": "pushed to pbandj082/aboutty",
+          "value": "pushed to Lethephobia/appletheia\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-07-01 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "push         ",
+          "color": "#6ee7b7",
+          "bold": true
+        },
+        {
+          "value": "pushed to Lethephobia/appletheia\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-07-01 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "push         ",
+          "color": "#6ee7b7",
+          "bold": true
+        },
+        {
+          "value": "pushed to Lethephobia/appletheia",
           "color": "#cbd5e1"
         }
       ]
