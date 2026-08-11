@@ -195,7 +195,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-08-10T04:59:28Z",
+          "value": "2026-08-11T04:44:09Z",
           "color": "#94a3b8",
           "bold": true
         }
@@ -214,7 +214,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2025-08-10..2026-08-10\n",
+          "value": "2025-08-11..2026-08-11\n",
           "color": "#94a3b8",
           "bold": true
         },
@@ -223,7 +223,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "3,322\n",
+          "value": "3,334\n",
           "color": "#6ee7b7",
           "bold": true
         },
@@ -268,7 +268,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "267\n",
+          "value": "266\n",
           "color": "#8bd5ca",
           "bold": true
         },
@@ -286,7 +286,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2,343\n",
+          "value": "2,355\n",
           "color": "#94a3b8",
           "bold": true
         }
@@ -332,7 +332,7 @@
           "color": "#8bd5ca"
         },
         {
-          "value": "2026-08-03\n",
+          "value": "2026-08-10\n",
           "color": "#94a3b8"
         },
         {
@@ -405,6 +405,19 @@
           "bold": true
         },
         {
+          "value": "starred solana-foundation/kora\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-08-10 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "star         ",
+          "color": "#facc15",
+          "bold": true
+        },
+        {
           "value": "starred rvben/rumdl\n",
           "color": "#cbd5e1"
         },
@@ -423,19 +436,6 @@
         },
         {
           "value": "2026-08-08 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "push         ",
-          "color": "#6ee7b7",
-          "bold": true
-        },
-        {
-          "value": "pushed to Lethephobia/kessign\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-08-07 ",
           "color": "#94a3b8"
         },
         {
