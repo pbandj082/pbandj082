@@ -177,7 +177,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "11\n",
+          "value": "10\n",
           "color": "#facc15",
           "bold": true
         },
@@ -195,7 +195,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-08-21T04:05:40Z",
+          "value": "2026-08-22T04:00:00Z",
           "color": "#94a3b8",
           "bold": true
         }
@@ -214,7 +214,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2025-08-21..2026-08-21\n",
+          "value": "2025-08-22..2026-08-22\n",
           "color": "#94a3b8",
           "bold": true
         },
@@ -223,7 +223,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "3,440\n",
+          "value": "3,441\n",
           "color": "#6ee7b7",
           "bold": true
         },
@@ -268,7 +268,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "270\n",
+          "value": "271\n",
           "color": "#8bd5ca",
           "bold": true
         },
@@ -286,7 +286,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2,458\n",
+          "value": "2,459\n",
           "color": "#94a3b8",
           "bold": true
         }
@@ -396,6 +396,19 @@
       "typingIntervalMs": 0,
       "text": [
         {
+          "value": "2026-08-21 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "push         ",
+          "color": "#6ee7b7",
+          "bold": true
+        },
+        {
+          "value": "pushed to Lethephobia/appletheia\n",
+          "color": "#cbd5e1"
+        },
+        {
           "value": "2026-08-20 ",
           "color": "#94a3b8"
         },
@@ -444,20 +457,7 @@
           "bold": true
         },
         {
-          "value": "starred metaplex-foundation/mpl-inscription\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-08-18 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "issue        ",
-          "color": "#fb7185",
-          "bold": true
-        },
-        {
-          "value": "opened Lethephobia/appletheia",
+          "value": "starred metaplex-foundation/mpl-inscription",
           "color": "#cbd5e1"
         }
       ]
