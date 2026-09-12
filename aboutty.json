@@ -177,7 +177,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "10\n",
+          "value": "11\n",
           "color": "#facc15",
           "bold": true
         },
@@ -186,7 +186,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "25\n",
+          "value": "23\n",
           "color": "#facc15",
           "bold": true
         },
@@ -195,7 +195,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-09-11T08:09:37Z",
+          "value": "2026-09-12T08:00:15Z",
           "color": "#94a3b8",
           "bold": true
         }
@@ -214,7 +214,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2025-09-11..2026-09-11\n",
+          "value": "2025-09-12..2026-09-12\n",
           "color": "#94a3b8",
           "bold": true
         },
@@ -396,6 +396,19 @@
       "typingIntervalMs": 0,
       "text": [
         {
+          "value": "2026-09-09 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "push         ",
+          "color": "#6ee7b7",
+          "bold": true
+        },
+        {
+          "value": "pushed to Lethephobia/appletheia\n",
+          "color": "#cbd5e1"
+        },
+        {
           "value": "2026-09-08 ",
           "color": "#94a3b8"
         },
@@ -444,20 +457,7 @@
           "bold": true
         },
         {
-          "value": "pushed to Lethephobia/appletheia\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-08-29 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "star         ",
-          "color": "#facc15",
-          "bold": true
-        },
-        {
-          "value": "starred alloy-rs/alloy",
+          "value": "pushed to Lethephobia/appletheia",
           "color": "#cbd5e1"
         }
       ]
