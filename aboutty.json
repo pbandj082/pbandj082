@@ -195,7 +195,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-09-12T08:00:15Z",
+          "value": "2026-09-13T08:25:01Z",
           "color": "#94a3b8",
           "bold": true
         }
@@ -214,7 +214,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2025-09-12..2026-09-12\n",
+          "value": "2025-09-13..2026-09-13\n",
           "color": "#94a3b8",
           "bold": true
         },
@@ -396,6 +396,19 @@
       "typingIntervalMs": 0,
       "text": [
         {
+          "value": "2026-09-12 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "star         ",
+          "color": "#facc15",
+          "bold": true
+        },
+        {
+          "value": "starred nymtech/nym\n",
+          "color": "#cbd5e1"
+        },
+        {
           "value": "2026-09-09 ",
           "color": "#94a3b8"
         },
@@ -436,19 +449,6 @@
         },
         {
           "value": "2026-09-06 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "push         ",
-          "color": "#6ee7b7",
-          "bold": true
-        },
-        {
-          "value": "pushed to Lethephobia/appletheia\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-08-30 ",
           "color": "#94a3b8"
         },
         {
