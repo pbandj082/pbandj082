@@ -195,7 +195,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-09-15T08:48:14Z",
+          "value": "2026-09-16T08:42:13Z",
           "color": "#94a3b8",
           "bold": true
         }
@@ -214,7 +214,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2025-09-15..2026-09-15\n",
+          "value": "2025-09-16..2026-09-16\n",
           "color": "#94a3b8",
           "bold": true
         },
@@ -223,7 +223,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "3,564\n",
+          "value": "3,583\n",
           "color": "#6ee7b7",
           "bold": true
         },
@@ -268,7 +268,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "284\n",
+          "value": "286\n",
           "color": "#8bd5ca",
           "bold": true
         },
@@ -286,7 +286,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2,604\n",
+          "value": "2,623\n",
           "color": "#94a3b8",
           "bold": true
         }
@@ -396,20 +396,7 @@
       "typingIntervalMs": 0,
       "text": [
         {
-          "value": "2026-09-13 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "push         ",
-          "color": "#6ee7b7",
-          "bold": true
-        },
-        {
-          "value": "pushed to Lethephobia/appletheia\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-09-12 ",
+          "value": "2026-09-16 ",
           "color": "#94a3b8"
         },
         {
@@ -418,46 +405,59 @@
           "bold": true
         },
         {
-          "value": "starred nymtech/nym\n",
+          "value": "starred json-api/json-api\n",
           "color": "#cbd5e1"
         },
         {
-          "value": "2026-09-09 ",
+          "value": "2026-09-16 ",
           "color": "#94a3b8"
         },
         {
-          "value": "push         ",
-          "color": "#6ee7b7",
+          "value": "star         ",
+          "color": "#facc15",
           "bold": true
         },
         {
-          "value": "pushed to Lethephobia/appletheia\n",
+          "value": "starred asyncapi/spec\n",
           "color": "#cbd5e1"
         },
         {
-          "value": "2026-09-08 ",
+          "value": "2026-09-16 ",
           "color": "#94a3b8"
         },
         {
-          "value": "push         ",
-          "color": "#6ee7b7",
+          "value": "star         ",
+          "color": "#facc15",
           "bold": true
         },
         {
-          "value": "pushed to Lethephobia/appletheia\n",
+          "value": "starred cloudevents/sdk-rust\n",
           "color": "#cbd5e1"
         },
         {
-          "value": "2026-09-06 ",
+          "value": "2026-09-16 ",
           "color": "#94a3b8"
         },
         {
-          "value": "push         ",
-          "color": "#6ee7b7",
+          "value": "star         ",
+          "color": "#facc15",
           "bold": true
         },
         {
-          "value": "pushed to Lethephobia/appletheia",
+          "value": "starred OAI/OpenAPI-Specification\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-09-16 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "star         ",
+          "color": "#facc15",
+          "bold": true
+        },
+        {
+          "value": "starred cloudevents/spec",
           "color": "#cbd5e1"
         }
       ]
