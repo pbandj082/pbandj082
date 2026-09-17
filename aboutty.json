@@ -195,7 +195,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-09-16T08:42:13Z",
+          "value": "2026-09-17T08:45:48Z",
           "color": "#94a3b8",
           "bold": true
         }
@@ -214,7 +214,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2025-09-16..2026-09-16\n",
+          "value": "2025-09-17..2026-09-17\n",
           "color": "#94a3b8",
           "bold": true
         },
@@ -223,7 +223,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "3,583\n",
+          "value": "3,597\n",
           "color": "#6ee7b7",
           "bold": true
         },
@@ -250,7 +250,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "16\n",
+          "value": "19\n",
           "color": "#fb7185",
           "bold": true
         },
@@ -268,7 +268,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "286\n",
+          "value": "287\n",
           "color": "#8bd5ca",
           "bold": true
         },
@@ -286,7 +286,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2,623\n",
+          "value": "2,634\n",
           "color": "#94a3b8",
           "bold": true
         }
@@ -405,7 +405,46 @@
           "bold": true
         },
         {
-          "value": "starred json-api/json-api\n",
+          "value": "starred googleapis/google-cloudevents\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-09-16 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "issue        ",
+          "color": "#fb7185",
+          "bold": true
+        },
+        {
+          "value": "opened Lethephobia/appletheia\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-09-16 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "issue        ",
+          "color": "#fb7185",
+          "bold": true
+        },
+        {
+          "value": "opened Lethephobia/appletheia\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-09-16 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "issue        ",
+          "color": "#fb7185",
+          "bold": true
+        },
+        {
+          "value": "opened Lethephobia/appletheia\n",
           "color": "#cbd5e1"
         },
         {
@@ -418,46 +457,7 @@
           "bold": true
         },
         {
-          "value": "starred asyncapi/spec\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-09-16 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "star         ",
-          "color": "#facc15",
-          "bold": true
-        },
-        {
-          "value": "starred cloudevents/sdk-rust\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-09-16 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "star         ",
-          "color": "#facc15",
-          "bold": true
-        },
-        {
-          "value": "starred OAI/OpenAPI-Specification\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-09-16 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "star         ",
-          "color": "#facc15",
-          "bold": true
-        },
-        {
-          "value": "starred cloudevents/spec",
+          "value": "starred json-api/json-api",
           "color": "#cbd5e1"
         }
       ]
