@@ -195,7 +195,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-10-26T09:08:35Z",
+          "value": "2026-10-27T09:10:20Z",
           "color": "#94a3b8",
           "bold": true
         }
@@ -214,7 +214,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2025-10-26..2026-10-26\n",
+          "value": "2025-10-27..2026-10-27\n",
           "color": "#94a3b8",
           "bold": true
         },
@@ -223,7 +223,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "3,893\n",
+          "value": "3,875\n",
           "color": "#6ee7b7",
           "bold": true
         },
@@ -232,7 +232,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "896\n",
+          "value": "895\n",
           "color": "#93c5fd",
           "bold": true
         },
@@ -286,7 +286,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2,849\n",
+          "value": "2,832\n",
           "color": "#94a3b8",
           "bold": true
         }
@@ -396,6 +396,45 @@
       "typingIntervalMs": 0,
       "text": [
         {
+          "value": "2026-10-27 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "star         ",
+          "color": "#facc15",
+          "bold": true
+        },
+        {
+          "value": "starred zed-industries/zed\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-10-27 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "star         ",
+          "color": "#facc15",
+          "bold": true
+        },
+        {
+          "value": "starred longbridge/gpui-kit\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-10-26 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "star         ",
+          "color": "#facc15",
+          "bold": true
+        },
+        {
+          "value": "starred bdero/flutter_scene\n",
+          "color": "#cbd5e1"
+        },
+        {
           "value": "2026-10-25 ",
           "color": "#94a3b8"
         },
@@ -418,46 +457,7 @@
           "bold": true
         },
         {
-          "value": "opened Lethephobia/appletheia\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-10-25 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "star         ",
-          "color": "#facc15",
-          "bold": true
-        },
-        {
-          "value": "starred googleapis/release-please\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-10-25 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "star         ",
-          "color": "#facc15",
-          "bold": true
-        },
-        {
-          "value": "starred release-plz/release-plz\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-10-25 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "push         ",
-          "color": "#6ee7b7",
-          "bold": true
-        },
-        {
-          "value": "pushed to Lethephobia/appletheia",
+          "value": "opened Lethephobia/appletheia",
           "color": "#cbd5e1"
         }
       ]
