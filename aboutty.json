@@ -195,7 +195,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-10-28T09:51:26Z",
+          "value": "2026-10-29T10:12:05Z",
           "color": "#94a3b8",
           "bold": true
         }
@@ -214,7 +214,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2025-10-28..2026-10-28\n",
+          "value": "2025-10-29..2026-10-29\n",
           "color": "#94a3b8",
           "bold": true
         },
@@ -223,7 +223,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "3,977\n",
+          "value": "3,958\n",
           "color": "#6ee7b7",
           "bold": true
         },
@@ -232,7 +232,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "893\n",
+          "value": "887\n",
           "color": "#93c5fd",
           "bold": true
         },
@@ -241,7 +241,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "112\n",
+          "value": "110\n",
           "color": "#c084fc",
           "bold": true
         },
@@ -250,7 +250,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "27\n",
+          "value": "28\n",
           "color": "#fb7185",
           "bold": true
         },
@@ -286,7 +286,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2,936\n",
+          "value": "2,924\n",
           "color": "#94a3b8",
           "bold": true
         }
@@ -332,7 +332,7 @@
           "color": "#8bd5ca"
         },
         {
-          "value": "2026-10-27\n",
+          "value": "2026-10-29\n",
           "color": "#94a3b8"
         },
         {
@@ -396,6 +396,19 @@
       "typingIntervalMs": 0,
       "text": [
         {
+          "value": "2026-10-28 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "issue        ",
+          "color": "#fb7185",
+          "bold": true
+        },
+        {
+          "value": "opened Lethephobia/appletheia\n",
+          "color": "#cbd5e1"
+        },
+        {
           "value": "2026-10-27 ",
           "color": "#94a3b8"
         },
@@ -444,20 +457,7 @@
           "bold": true
         },
         {
-          "value": "starred longbridge/gpui-kit\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-10-26 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "star         ",
-          "color": "#facc15",
-          "bold": true
-        },
-        {
-          "value": "starred bdero/flutter_scene",
+          "value": "starred longbridge/gpui-kit",
           "color": "#cbd5e1"
         }
       ]
