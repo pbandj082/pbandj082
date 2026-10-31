@@ -177,7 +177,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "13\n",
+          "value": "12\n",
           "color": "#facc15",
           "bold": true
         },
@@ -195,7 +195,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-10-30T10:13:51Z",
+          "value": "2026-10-31T09:48:55Z",
           "color": "#94a3b8",
           "bold": true
         }
@@ -214,7 +214,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2025-10-30..2026-10-30\n",
+          "value": "2025-10-31..2026-10-31\n",
           "color": "#94a3b8",
           "bold": true
         },
@@ -223,7 +223,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "3,949\n",
+          "value": "3,944\n",
           "color": "#6ee7b7",
           "bold": true
         },
@@ -232,7 +232,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "887\n",
+          "value": "886\n",
           "color": "#93c5fd",
           "bold": true
         },
@@ -268,7 +268,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "307\n",
+          "value": "306\n",
           "color": "#8bd5ca",
           "bold": true
         },
@@ -286,7 +286,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2,915\n",
+          "value": "2,911\n",
           "color": "#94a3b8",
           "bold": true
         }
@@ -396,6 +396,19 @@
       "typingIntervalMs": 0,
       "text": [
         {
+          "value": "2026-10-29 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "push         ",
+          "color": "#6ee7b7",
+          "bold": true
+        },
+        {
+          "value": "pushed to Lethephobia/appletheia\n",
+          "color": "#cbd5e1"
+        },
+        {
           "value": "2026-10-28 ",
           "color": "#94a3b8"
         },
@@ -444,20 +457,7 @@
           "bold": true
         },
         {
-          "value": "starred leanprover/lean4\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-10-27 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "star         ",
-          "color": "#facc15",
-          "bold": true
-        },
-        {
-          "value": "starred zed-industries/zed",
+          "value": "starred leanprover/lean4",
           "color": "#cbd5e1"
         }
       ]
