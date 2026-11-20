@@ -195,7 +195,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2026-11-19T11:53:58Z",
+          "value": "2026-11-20T11:55:10Z",
           "color": "#94a3b8",
           "bold": true
         }
@@ -214,7 +214,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2025-11-19..2026-11-19\n",
+          "value": "2025-11-20..2026-11-20\n",
           "color": "#94a3b8",
           "bold": true
         },
@@ -223,7 +223,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "3,897\n",
+          "value": "3,891\n",
           "color": "#6ee7b7",
           "bold": true
         },
@@ -286,7 +286,7 @@
           "color": "#94a3b8"
         },
         {
-          "value": "2,888\n",
+          "value": "2,882\n",
           "color": "#94a3b8",
           "bold": true
         }
@@ -405,6 +405,19 @@
           "bold": true
         },
         {
+          "value": "starred a2ui-project/a2ui\n",
+          "color": "#cbd5e1"
+        },
+        {
+          "value": "2026-11-19 ",
+          "color": "#94a3b8"
+        },
+        {
+          "value": "star         ",
+          "color": "#facc15",
+          "bold": true
+        },
+        {
           "value": "starred gmsol-labs/gmx-solana\n",
           "color": "#cbd5e1"
         },
@@ -444,20 +457,7 @@
           "bold": true
         },
         {
-          "value": "pushed to Lethephobia/appletheia\n",
-          "color": "#cbd5e1"
-        },
-        {
-          "value": "2026-11-12 ",
-          "color": "#94a3b8"
-        },
-        {
-          "value": "push         ",
-          "color": "#6ee7b7",
-          "bold": true
-        },
-        {
-          "value": "pushed to Lethephobia/soletheia",
+          "value": "pushed to Lethephobia/appletheia",
           "color": "#cbd5e1"
         }
       ]
